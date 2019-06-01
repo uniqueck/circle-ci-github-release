@@ -11,7 +11,7 @@ jobs:
       - image: circleci/openjdk:8-jdk
     steps:
       - checkout
-      - run ./mvnw verify
+      - run: ./mvnw verify
 workflows:
   version: 2
   build_and_test:
