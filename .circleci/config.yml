@@ -5,6 +5,11 @@ jobs:
       - image: circleci/openjdk:8-jdk
     steps:
       - checkout
+      - run: |
+          VERSION=$(echo ${CIRCLE_TAG} | grep -Po '\d+\.\d+\.\d+')
+          if [[ "$VERSION" -eq "" ]]; then
+            ./mvnw versions:set -DnewVersion=${VERSION} versions:commit
+          endif
       - run: ./mvnw verify
       - persist_to_workspace:
           root: target
@@ -30,7 +35,7 @@ jobs:
             name: "Publish Release on GitHub"
             command: |
               go get github.com/tcnksm/ghr
-              ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} ./target/
+              ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ./target/
 workflows:
   version: 2
   build-n-deploy:
