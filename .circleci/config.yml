@@ -5,27 +5,21 @@ jobs:
       - image: circleci/openjdk:8-jdk
     steps:
       - checkout
-      - run: ./mvnw verify -DskipTests=true
+      - run: ./mvnw verify
       - persist_to_workspace:
           root: target
           paths:
             - circle-ci-github-release.jar
-  test:
-    docker:
-      - image: circleci/openjdk:8-jdk
-    steps:
-      - checkout
-      - run: ./mvnw verify
       - run:
           name: Save test results
           command: |
             mkdir -p ~/test-results/junit/
             find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} ~/test-results/junit/ \;
           when: always
-      - store_test_results:
-          path: ~/test-results
-      - store_artifacts:
-          path: ~/test-results/junit
+            - store_test_results:
+                path: ~/test-results
+            - store_artifacts:
+                path: ~/test-results/junit
   publish-github-release:
       docker:
         - image: circleci/golang:1.8
@@ -42,21 +36,15 @@ workflows:
   untagged-build:
     jobs:
       - build
-      - test:
-          requires:
-            - build
   tagged-build:
     jobs:
       - build:
           filters:
             tags:
               only: /.*/
-      - test:
-          requires:
-            - build
       - publish-github-release:
           requires:
-            - test
+            - build
           filters:
             branches:
               ignore: /.*/
