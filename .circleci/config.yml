@@ -6,6 +6,10 @@ jobs:
     steps:
       - checkout
       - run: ./mvnw verify -DskipTests=true
+      - persist_to_workspace:
+          root: target
+          paths:
+            - *.jar
   test:
     docker:
       - image: circleci/openjdk:8-jdk
@@ -22,11 +26,31 @@ jobs:
           path: ~/test-results
       - store_artifacts:
           path: ~/test-results/junit
+  publish-github-release:
+      docker:
+        - image: circleci/golang:1.8
+      steps:
+        - attach_workspace:
+            at: ./target
+        - run:
+            name: "Publish Release on GitHub"
+            command: |
+              go get github.com/tcnksm/ghr
+              ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ./target/
 workflows:
   version: 2
-  build_and_test:
+  main:
     jobs:
-      - build
+      - build:
       - test:
           requires:
             - build
+      - publish-github-release:
+          requires:
+            - test
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^\d+\.\d+\.\d+\$/
+
