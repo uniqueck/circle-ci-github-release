@@ -33,15 +33,12 @@ jobs:
               ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ./target/
 workflows:
   version: 2
-  untagged-build:
-    jobs:
-      - build
-  tagged-build:
+  build-n-deploy:
     jobs:
       - build:
           filters:
             tags:
-              only: /^v.*/
+              only: /.*/
       - publish-github-release:
           requires:
             - build
