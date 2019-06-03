@@ -39,9 +39,18 @@ jobs:
               ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ./target/
 workflows:
   version: 2
-  main:
+  untagged-build:
     jobs:
       - build
+      - test:
+          requires:
+            - build
+  tagged-build:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
       - test:
           requires:
             - build
@@ -52,5 +61,5 @@ workflows:
             branches:
               ignore: /.*/
             tags:
-              only: /^\d+\.\d+\.\d+\$/
+              only: /^v.*/
 
