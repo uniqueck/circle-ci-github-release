@@ -6,8 +6,8 @@ jobs:
     steps:
       - checkout
       - run: |
-          VERSION=$(echo ${CIRCLE_TAG} | grep -Po '\d+\.\d+\.\d+')
-          if [[ "$VERSION" -eq "" ]]; then
+          if [[ "$CIRCLE_TAG" != "" ]]; then
+            VERSION="$(echo "$CIRCLE_TAG" | grep -Po '\d+\.\d+\.\d+')"
             ./mvnw versions:set -DnewVersion=${VERSION} versions:commit
           fi
       - run: ./mvnw verify
