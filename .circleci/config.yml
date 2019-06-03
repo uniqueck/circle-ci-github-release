@@ -41,7 +41,7 @@ workflows:
       - build:
           filters:
             tags:
-              only: /.*/
+              only: /^v.*/
       - publish-github-release:
           requires:
             - build
