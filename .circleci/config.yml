@@ -9,7 +9,7 @@ jobs:
       - persist_to_workspace:
           root: target
           paths:
-            - *.jar
+            - circle-ci-github-release.jar
   test:
     docker:
       - image: circleci/openjdk:8-jdk
