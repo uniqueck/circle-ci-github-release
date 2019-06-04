@@ -38,6 +38,10 @@ jobs:
               go get github.com/tcnksm/ghr
               ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ./target/
         - run:
+            name: "Set Permission"
+            command: chmod +x ./scripts/telegram_notification.sh
+            when: on_success
+        - run:
             name: "Send Notification"
             command: ./scripts/telegram_notification.sh "success"
             shell: /bin/bash
