@@ -40,6 +40,7 @@ jobs:
         - run:
             name: "Send Notification"
             command: ./scripts/telegram_notification.sh "success"
+            shell: /bin/bash
             when: on_success
 workflows:
   version: 2
