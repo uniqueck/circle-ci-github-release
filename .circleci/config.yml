@@ -38,7 +38,7 @@ jobs:
               ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ./target/
         - run:
             name: "Send Notification"
-            command: ./telegram_notification.sh "success"
+            command: ./scripts/telegram_notification.sh "success"
             when: on_success
 workflows:
   version: 2
