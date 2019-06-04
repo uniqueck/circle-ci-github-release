@@ -15,10 +15,6 @@ jobs:
           root: target
           paths:
             - circle-ci-github-release.jar
-      - persist_to_workspace:
-          root: scripts
-          paths:
-            - telegram_notification.sh
       - run:
           name: Save test results
           command: |
@@ -33,10 +29,9 @@ jobs:
       docker:
         - image: circleci/golang:1.8
       steps:
+        - checkout
         - attach_workspace:
             at: ./target
-        - attach_workspace:
-            at: ./scripts
         - run:
             name: "Publish Release on GitHub"
             command: |
