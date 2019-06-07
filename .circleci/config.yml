@@ -25,6 +25,12 @@ jobs:
           path: ~/test-results
       - store_artifacts:
           path: ~/test-results/junit
+      - run:
+          name: publish documentation to gh-pages
+          command: |
+          if [[ "$CIRCLE_TAG" != "" ]]; then
+            ./mvnw org.apache.maven.plugins:maven-scm-publish-plugin:publish-scm
+          fi
   publish-github-release:
       docker:
         - image: circleci/golang:1.8
