@@ -29,6 +29,8 @@ jobs:
           name: publish documentation to gh-pages
           command: |
             if [[ "$CIRCLE_TAG" != "" ]]; then
+              git config user.email "ci-build@gmail.com"
+              git config user.name "ci-build"
               ./mvnw org.apache.maven.plugins:maven-scm-publish-plugin:publish-scm
             fi
   publish-github-release:
