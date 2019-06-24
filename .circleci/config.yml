@@ -89,10 +89,14 @@ workflows:
             tags:
               only: /.*/
       - docs-build:
+          requires:
+            - build
           filters:
             tags:
               only: /.*/
       - docs-deploy:
+          requires:
+            - docs-build
           filters:
             tags:
               only: /.*/
