@@ -33,6 +33,9 @@ jobs:
         - run:
             name: "Generate documentation"
             command: ./mvnw -Pbuild-docs clean generate-resources
+        - run:
+            name: "show content of directory"
+            command: ls target/generated-docs
         - persist_to_workspace:
               root: ./target
               paths: generated-docs
