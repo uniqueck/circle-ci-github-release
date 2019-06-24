@@ -47,8 +47,14 @@ jobs:
         - attach_workspace:
             at: ./target
         - run:
+            name: "show content of directory"
+            command: ls target/generated-docs
+        - run:
             name: "Disable jekyll builds"
             command: touch target/generated-docs/.nojekyll
+        - run:
+            name: "show content of directory"
+            command: ls target/generated-docs
         - run:
             name: "Install and configure dependencies"
             command: |
