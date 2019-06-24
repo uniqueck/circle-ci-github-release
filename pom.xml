@@ -18,7 +18,6 @@
 		<asciidoctor.maven.plugin.version>2.0.0-RC.1</asciidoctor.maven.plugin.version>
 		<asciidoctorj.version>2.0.0</asciidoctorj.version>
 		<asciidoctorj.diagram.version>1.5.18</asciidoctorj.diagram.version>
-		<jruby.version>9.2.7.0</jruby.version>
 		<java.version>1.8</java.version>
 	</properties>
 
@@ -54,54 +53,6 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.asciidoctor</groupId>
-				<artifactId>asciidoctor-maven-plugin</artifactId>
-				<version>${asciidoctor.maven.plugin.version}</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.jruby</groupId>
-						<artifactId>jruby-complete</artifactId>
-						<version>${jruby.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.asciidoctor</groupId>
-						<artifactId>asciidoctorj</artifactId>
-						<version>${asciidoctorj.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.asciidoctor</groupId>
-						<artifactId>asciidoctorj-diagram</artifactId>
-						<version>${asciidoctorj.diagram.version}</version>
-					</dependency>
-				</dependencies>
-				<configuration>
-					<backend>html5</backend>
-					<sourceHighlighter>coderay</sourceHighlighter>
-				</configuration>
-				<executions>
-					<execution>
-						<inherited>false</inherited>
-						<id>de-asciidoc-to-html</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>process-asciidoc</goal>
-						</goals>
-						<configuration>
-							<imagesDir>./images</imagesDir>
-							<sourceDirectory>${basedir}/src/docs</sourceDirectory>
-							<sourceDocumentName>index.adoc</sourceDocumentName>
-							<attributes>
-								<toc>left</toc>
-							</attributes>
-							<requires>
-								<require>asciidoctor-diagram</require>
-							</requires>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
 
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-scm-publish-plugin</artifactId>
@@ -120,7 +71,61 @@
 			</plugin>
 
 
+
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>build-doc</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.asciidoctor</groupId>
+						<artifactId>asciidoctor-maven-plugin</artifactId>
+						<version>${asciidoctor.maven.plugin.version}</version>
+						<dependencies>
+							<dependency>
+								<groupId>org.asciidoctor</groupId>
+								<artifactId>asciidoctorj</artifactId>
+								<version>${asciidoctorj.version}</version>
+							</dependency>
+							<dependency>
+								<groupId>org.asciidoctor</groupId>
+								<artifactId>asciidoctorj-diagram</artifactId>
+								<version>${asciidoctorj.diagram.version}</version>
+							</dependency>
+						</dependencies>
+						<configuration>
+							<backend>html5</backend>
+							<sourceHighlighter>coderay</sourceHighlighter>
+						</configuration>
+						<executions>
+							<execution>
+								<inherited>false</inherited>
+								<id>de-asciidoc-to-html</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<imagesDir>./images</imagesDir>
+									<sourceDirectory>${basedir}/src/docs</sourceDirectory>
+									<sourceDocumentName>index.adoc</sourceDocumentName>
+									<attributes>
+										<toc>left</toc>
+									</attributes>
+									<requires>
+										<require>asciidoctor-diagram</require>
+									</requires>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
 
 </project>

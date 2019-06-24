@@ -33,6 +33,32 @@ jobs:
               git config user.name "ci-build"
               ./mvnw org.apache.maven.plugins:maven-scm-publish-plugin:publish-scm
             fi
+  docs-build:
+      docker:
+        - image: circleci/openjdk:8-jdk
+      steps:
+        - checkout
+        - run:
+            name: "Generate documentation"
+            command: ./mvnw -Pdocs-build clean generate-resources
+        - persist_to_workspace:
+              root: target/generated-docs
+              paths: *.html
+  docs-deploy:
+      docker:
+        - image: node:8.10.0
+      steps:
+        - attach_workspace:
+            at: target/generated-docs
+        - run:
+            name: "Install and configure dependencies"
+            command: |
+              npm install -g --silent gh-pages@2.0.1
+              git config user.email "ci-build@constantinidis.de"
+              git config user.name "ci-build"
+        - run:
+            name: "Deploy docs to gh-pages branch"
+            command gh-pages --dist target/generated-docs/*.html
   publish-github-release:
       docker:
         - image: circleci/golang:1.8
@@ -59,6 +85,14 @@ workflows:
   build-n-deploy:
     jobs:
       - build:
+          filters:
+            tags:
+              only: /.*/
+      - docs-build:
+          filters:
+            tags:
+              only: /.*/
+      - docs-deploy:
           filters:
             tags:
               only: /.*/
