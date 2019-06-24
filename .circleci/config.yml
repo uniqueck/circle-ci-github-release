@@ -25,14 +25,6 @@ jobs:
           path: ~/test-results
       - store_artifacts:
           path: ~/test-results/junit
-      - run:
-          name: publish documentation to gh-pages
-          command: |
-            if [[ "$CIRCLE_TAG" != "" ]]; then
-              git config user.email "ci-build@gmail.com"
-              git config user.name "ci-build"
-              ./mvnw org.apache.maven.plugins:maven-scm-publish-plugin:publish-scm
-            fi
   docs-build:
       docker:
         - image: circleci/openjdk:8-jdk
@@ -59,7 +51,7 @@ jobs:
               git config user.name "ci-build"
         - run:
             name: "Deploy docs to gh-pages branch"
-            command: gh-pages --dist target/generated-docs/*.html
+            command: gh-pages --dist target/generated-docs
   publish-github-release:
       docker:
         - image: circleci/golang:1.8
