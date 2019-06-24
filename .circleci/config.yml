@@ -42,14 +42,14 @@ jobs:
             name: "Generate documentation"
             command: ./mvnw -Pdocs-build clean generate-resources
         - persist_to_workspace:
-              root: target/generated-docs
-              paths: *.html
+              root: target
+              paths: generated-docs
   docs-deploy:
       docker:
         - image: node:8.10.0
       steps:
         - attach_workspace:
-            at: target/generated-docs
+            at: target
         - run:
             name: "Install and configure dependencies"
             command: |
