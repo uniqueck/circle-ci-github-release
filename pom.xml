@@ -77,7 +77,7 @@
 
 	<profiles>
 		<profile>
-			<id>build-doc</id>
+			<id>build-docs</id>
 			<build>
 				<plugins>
 					<plugin>

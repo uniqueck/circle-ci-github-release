@@ -40,7 +40,7 @@ jobs:
         - checkout
         - run:
             name: "Generate documentation"
-            command: ./mvnw -Pdocs-build clean generate-resources
+            command: ./mvnw -Pbuild-docs clean generate-resources
         - persist_to_workspace:
               root: ./target
               paths: generated-docs
