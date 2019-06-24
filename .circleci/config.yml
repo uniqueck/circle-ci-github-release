@@ -58,7 +58,7 @@ jobs:
               git config user.name "ci-build"
         - run:
             name: "Deploy docs to gh-pages branch"
-            command gh-pages --dist target/generated-docs/*.html
+            command: gh-pages --dist target/generated-docs/*.html
   publish-github-release:
       docker:
         - image: circleci/golang:1.8
