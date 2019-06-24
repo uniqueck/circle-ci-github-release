@@ -44,14 +44,20 @@ jobs:
         - attach_workspace:
             at: ./target
         - run:
+            name: "Disable jekyll builds"
+            command: touch target/generated-docs/.nojekyll
+        - run:
             name: "Install and configure dependencies"
             command: |
               npm install -g --silent gh-pages@2.0.1
               git config user.email "ci-build@constantinidis.de"
               git config user.name "ci-build"
+        - add_ssh_keys:
+            fingerprints:
+              - "d0:63:05:2b:86:6c:a9:1d:98:5c:6f:cd:9d:2c:01:46"
         - run:
             name: "Deploy docs to gh-pages branch"
-            command: gh-pages --dist target/generated-docs
+            command: gh-pages --dotfiles -message "[skip ci] Updates" --dist target/generated-docs
   publish-github-release:
       docker:
         - image: circleci/golang:1.8
