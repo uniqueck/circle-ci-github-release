@@ -66,7 +66,7 @@ jobs:
               - "d0:63:05:2b:86:6c:a9:1d:98:5c:6f:cd:9d:2c:01:46"
         - run:
             name: "Deploy docs to gh-pages branch"
-            command: gh-pages --dotfiles -message "[skip ci] Updates" --dist target/generated-docs
+            command: gh-pages --dotfiles --message "[skip ci] Updates" --dist target/generated-docs
   publish-github-release:
       docker:
         - image: circleci/golang:1.8
