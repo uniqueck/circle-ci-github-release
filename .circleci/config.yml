@@ -106,8 +106,8 @@ workflows:
           requires:
             - docs-build
           filters:
-            tags:
-              only: /.*/
+            branches:
+              only: master
       - publish-github-release:
           requires:
             - build
